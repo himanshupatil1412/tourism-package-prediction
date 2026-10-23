@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main  # Automatically triggers on push to the main branch
+    paths-ignore:     # documentation-only changes do not need a retrained model
+      - README.md
+      - .gitignore
   workflow_dispatch:  # lets you click "Run workflow" in the Actions tab
 
 permissions:
@@ -17,10 +20,10 @@ jobs:
 
   register-dataset:
     name: Register Dataset
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
       - name: Install Dependencies
@@ -28,7 +31,7 @@ jobs:
       - name: Register Dataset
         run: python tourism_project/model_building/data_register.py
       - name: Upload Registered Dataset
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: registered-data
           path: tourism_project/data/tourism.csv
@@ -37,10 +40,10 @@ jobs:
   data-prep:
     name: Data Preparation
     needs: register-dataset          # starts only after the dataset is registered
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
       - name: Install Dependencies
@@ -48,7 +51,7 @@ jobs:
       - name: Run Data Preparation
         run: python tourism_project/model_building/prep.py
       - name: Upload Train Test Splits
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: data-splits
           path: |
@@ -61,18 +64,18 @@ jobs:
   model-training:
     name: Model Training, Validation and Registration
     needs: data-prep                 # starts only after the splits exist
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0             # full history so the model commit can be rebased safely
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
       - name: Install Dependencies
         run: pip install -r tourism_project/requirements.txt
       - name: Download Train Test Splits
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: data-splits          # brings Xtrain/Xtest/ytrain/ytest from the data-prep job
       - name: Start MLflow Server
@@ -85,7 +88,7 @@ jobs:
         run: python tourism_project/model_building/validate_model.py
       - name: Upload MLflow Tracking Data
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: mlflow-tracking
           path: |
