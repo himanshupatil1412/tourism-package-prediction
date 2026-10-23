@@ -1,0 +1,18 @@
+# Python caches
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Files the pipeline creates while it runs (never committed)
+Xtrain.csv
+Xtest.csv
+ytrain.csv
+ytest.csv
+mlruns/
+mlartifacts/
+mlflow.log
+
+# Secrets must never reach the repository
+.env
+*.env
+.secrets*
