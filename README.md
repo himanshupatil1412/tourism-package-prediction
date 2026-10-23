@@ -25,13 +25,15 @@ automatically.
 ## Results
 
 The model is an XGBoost classifier inside a scikit-learn pipeline, tuned on F1 over 64 hyperparameter
-combinations. On the 801 held-out test customers (19% buyers) it reaches about:
+combinations. On the 801 held-out test customers (19% buyers):
 
-| Recall | Precision | F1 | ROC-AUC |
-|---|---|---|---|
-| 0.81 | 0.83 | 0.82 | 0.95 |
+| Model | Recall | Precision | F1 | ROC-AUC |
+|---|---|---|---|---|
+| Deployed model - all 17 features (after the sales pitch) | 0.81 | 0.83 | 0.82 | 0.95 |
+| Before first contact - 14 customer features (notebook analysis) | 0.76 | 0.77 | 0.77 | 0.92 |
 
-So it finds about four out of five buyers, and about five out of six customers it flags really buy. The
+The deployed model finds about four out of five buyers, and about five out of six customers it flags
+really buy. Even before any contact, the customer details alone find about three out of four buyers. The
 exact figures of the model currently deployed are in `tourism_project/deployment/model_metadata.json`
 and in the app's sidebar.
 
