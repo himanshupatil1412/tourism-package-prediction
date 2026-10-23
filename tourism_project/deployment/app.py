@@ -12,19 +12,21 @@ METADATA_PATH = os.path.join(APP_DIR, "model_metadata.json")
 
 
 @st.cache_resource
-def load_model():
-    """Load the trained pipeline (preprocessing + XGBoost) once and reuse it."""
+def load_model(file_version):
+    """Load the trained pipeline (preprocessing + XGBoost) once per committed version of the file."""
     return joblib.load(MODEL_PATH)
 
 
 @st.cache_data
-def load_metadata():
+def load_metadata(file_version):
     with open(METADATA_PATH) as f:
         return json.load(f)
 
 
-model = load_model()
-metadata = load_metadata()
+# The file's modification time is the cache key: when the pipeline commits a new model and Streamlit
+# pulls it, the time changes and the new model is loaded without restarting the app
+model = load_model(os.path.getmtime(MODEL_PATH))
+metadata = load_metadata(os.path.getmtime(METADATA_PATH))
 THRESHOLD = metadata["classification_threshold"]
 
 # Example customers so the sales team can try the app quickly
