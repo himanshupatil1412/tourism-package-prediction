@@ -22,6 +22,33 @@ Every push to `main` (except README/.gitignore-only changes) starts `.github/wor
 Streamlit Community Cloud watches this repository, so a newly committed model reaches the live app
 automatically.
 
+## Results
+
+The model is an XGBoost classifier inside a scikit-learn pipeline, tuned on F1 over 64 hyperparameter
+combinations. On the 801 held-out test customers (19% buyers) it reaches about:
+
+| Recall | Precision | F1 | ROC-AUC |
+|---|---|---|---|
+| 0.81 | 0.83 | 0.82 | 0.95 |
+
+So it finds about four out of five buyers, and about five out of six customers it flags really buy. The
+exact figures of the model currently deployed are in `tourism_project/deployment/model_metadata.json`
+and in the app's sidebar.
+
+## Run it yourself
+
+```bash
+pip install -r tourism_project/requirements.txt
+python tourism_project/model_building/data_register.py      # validate the dataset
+python tourism_project/model_building/prep.py               # clean + split
+mlflow ui --port 5000 &                                     # experiment tracking server
+python tourism_project/model_building/train.py              # tune, evaluate, save the model
+python tourism_project/model_building/validate_model.py     # quality gate
+
+pip install -r tourism_project/deployment/requirements.txt
+streamlit run tourism_project/deployment/app.py             # the app, on http://localhost:8501
+```
+
 ## Repository layout
 
 ```
