@@ -45,7 +45,7 @@ NUMERIC = [c for c in Xtrain.columns if c not in CATEGORICAL]
 # (tree-based models split on raw values, so scaling is not needed)
 preprocessor = make_column_transformer(
     (OneHotEncoder(handle_unknown="ignore", sparse_output=False), CATEGORICAL),
-    remainder="passthrough",
+    ("passthrough", NUMERIC),
 )
 
 # Buyers are ~19% of customers; this ratio is offered to the grid as a class weight
