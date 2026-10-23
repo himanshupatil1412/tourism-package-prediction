@@ -1,6 +1,6 @@
 {
   "model": "XGBoost classifier inside a scikit-learn pipeline (one-hot encoding + model)",
-  "trained_at_utc": "2026-10-23 06:44 UTC",
+  "trained_at_utc": "2026-10-23 06:51 UTC",
   "trained_by": "GitHub Actions",
   "classification_threshold": 0.5,
   "feature_columns": [
