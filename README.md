@@ -6,12 +6,12 @@ registers the customer data, prepares it, trains and tunes an XGBoost classifier
 experiment tracking, checks the model against a quality gate, commits the approved model back to
 `main`, and serves it through a Streamlit web app.
 
-- **Live app:** (added after deployment)
+- **Live app:** https://tourism-package-prediction-hp.streamlit.app
 - **Pipeline runs:** https://github.com/himanshupatil1412/tourism-package-prediction/actions
 
 ## How the pipeline works
 
-Every push to `main` starts `.github/workflows/pipeline.yml`:
+Every push to `main` (except README/.gitignore-only changes) starts `.github/workflows/pipeline.yml`:
 
 | Job | What it does | Hands over |
 |---|---|---|
